@@ -1,66 +1,66 @@
 /* ============================================================
-   Neeraja Anupama — Portfolio interactions
+   Anupama — shared interactions (home + dance)
+   Content is fully visible without JS; this only adds polish.
    ============================================================ */
 (function () {
   "use strict";
 
-  /* Enable reveal animations only when JS runs (content stays visible without JS) */
-  document.body.classList.add("anim");
+  var root = document.documentElement;
+  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+  /* ---- Intro sequence: name / title reveal ---- */
+  // Two frames so the initial (hidden) state paints before transitioning.
+  requestAnimationFrame(function () {
+    requestAnimationFrame(function () { root.classList.add("is-ready"); });
+  });
+
+  // Stagger the letters of the hero name and the dance title.
+  document.querySelectorAll(".name .g").forEach(function (g, i) {
+    g.style.transitionDelay = reduceMotion ? "0ms" : (80 + i * 55) + "ms";
+  });
+  document.querySelectorAll(".dance-title .ch").forEach(function (c, i) {
+    c.style.transitionDelay = reduceMotion ? "0ms" : (260 + i * 60) + "ms";
+  });
+  document.querySelectorAll(".hero .seq").forEach(function (el, i) {
+    el.style.transitionDelay = reduceMotion ? "0ms" : (650 + i * 90) + "ms";
+  });
+
+  /* ---- The name: hover (pointer) or tap (touch) shifts its form ---- */
+  var name = document.getElementById("name");
+  if (name) {
+    var canHover = window.matchMedia("(hover: hover)").matches;
+    if (canHover) {
+      name.addEventListener("mouseenter", function () { name.classList.add("is-shifted"); });
+      name.addEventListener("mouseleave", function () { name.classList.remove("is-shifted"); });
+    } else {
+      name.addEventListener("click", function () { name.classList.toggle("is-shifted"); });
+    }
+  }
+
+  /* ---- Nav: solidify once the page scrolls ---- */
   var nav = document.getElementById("nav");
-  var navLinks = document.getElementById("navLinks");
-  var navToggle = document.getElementById("navToggle");
-
-  /* ---- Nav: solidify on scroll ---- */
   function onScroll() {
-    if (window.scrollY > 40) nav.classList.add("scrolled");
-    else nav.classList.remove("scrolled");
+    if (nav) nav.classList.toggle("is-scrolled", window.scrollY > 24);
   }
   window.addEventListener("scroll", onScroll, { passive: true });
   onScroll();
 
-  /* ---- Mobile menu ---- */
-  function closeMenu() {
-    navLinks.classList.remove("open");
-    nav.classList.remove("menu-open");
-  }
-  navToggle.addEventListener("click", function () {
-    navLinks.classList.toggle("open");
-    nav.classList.toggle("menu-open");
-  });
-  navLinks.querySelectorAll("a").forEach(function (a) {
-    a.addEventListener("click", closeMenu);
-  });
-
-  /* ---- Smooth scroll (accounts for fixed nav) ---- */
+  /* ---- Smooth in-page scrolling (native scroll-padding handles the nav offset) ---- */
   document.querySelectorAll('a[href^="#"]').forEach(function (link) {
     link.addEventListener("click", function (e) {
-      var id = this.getAttribute("href");
-      if (id === "#" || id.length < 2) return;
-      var target = document.querySelector(id);
+      var id = link.getAttribute("href");
+      if (id.length < 2) return;
+      var target = document.getElementById(id.slice(1));
       if (!target) return;
       e.preventDefault();
-      var top = target.getBoundingClientRect().top + window.scrollY - 70;
-      window.scrollTo({ top: top, behavior: "smooth" });
+      target.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+      history.pushState(null, "", id);
     });
   });
 
-  /* ---- Accordion (capabilities) ---- */
-  document.querySelectorAll(".acc-item .acc-head").forEach(function (head) {
-    head.addEventListener("click", function () {
-      var item = head.parentElement;
-      var isOpen = item.classList.contains("open");
-      // close siblings for a clean single-open feel
-      item.parentElement.querySelectorAll(".acc-item").forEach(function (sib) {
-        sib.classList.remove("open");
-      });
-      if (!isOpen) item.classList.add("open");
-    });
-  });
-
-  /* ---- Scroll reveal ---- */
+  /* ---- Section entrances ---- */
   var reveals = document.querySelectorAll(".reveal");
-  if ("IntersectionObserver" in window) {
+  if ("IntersectionObserver" in window && !reduceMotion) {
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (en) {
         if (en.isIntersecting) {
@@ -68,59 +68,56 @@
           io.unobserve(en.target);
         }
       });
-    }, { threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
+    }, { threshold: 0.08, rootMargin: "0px 0px -6% 0px" });
     reveals.forEach(function (el) { io.observe(el); });
   } else {
     reveals.forEach(function (el) { el.classList.add("in"); });
   }
 
-  /* ---- Active nav link by section ---- */
-  var sections = document.querySelectorAll("section[id], header[id]");
-  var linkMap = {};
-  navLinks.querySelectorAll('a[href^="#"]').forEach(function (a) {
-    linkMap[a.getAttribute("href").slice(1)] = a;
+  /* ---- Active nav link for in-page sections ---- */
+  var links = {};
+  document.querySelectorAll('.nav-links a[href^="#"]').forEach(function (a) {
+    links[a.getAttribute("href").slice(1)] = a;
   });
-  if ("IntersectionObserver" in window) {
+  if ("IntersectionObserver" in window && Object.keys(links).length) {
     var spy = new IntersectionObserver(function (entries) {
       entries.forEach(function (en) {
-        if (en.isIntersecting) {
-          Object.values(linkMap).forEach(function (a) { a.classList.remove("active"); });
-          var a = linkMap[en.target.id];
-          if (a) a.classList.add("active");
-        }
+        var a = links[en.target.id];
+        if (!a) return;
+        if (en.isIntersecting) a.setAttribute("aria-current", "location");
+        else a.removeAttribute("aria-current");
       });
     }, { rootMargin: "-45% 0px -50% 0px" });
-    sections.forEach(function (s) { spy.observe(s); });
-  }
-
-  /* ---- Lightbox (design pieces) ---- */
-  var lb = document.getElementById("lightbox");
-  var lbImg = document.getElementById("lbImg");
-  var lbCap = document.getElementById("lbCap");
-  var lbClose = document.getElementById("lbClose");
-
-  function openLightbox(src, cap) {
-    lbImg.src = src;
-    lbImg.alt = cap || "";
-    lbCap.textContent = cap || "";
-    lb.classList.add("open");
-    document.body.style.overflow = "hidden";
-  }
-  function closeLightbox() {
-    lb.classList.remove("open");
-    document.body.style.overflow = "";
-    setTimeout(function () { lbImg.src = ""; }, 300);
-  }
-  document.querySelectorAll(".cell[data-full]").forEach(function (p) {
-    p.addEventListener("click", function () {
-      openLightbox(p.getAttribute("data-full"), p.getAttribute("data-cap"));
+    Object.keys(links).forEach(function (id) {
+      var s = document.getElementById(id);
+      if (s) spy.observe(s);
     });
-  });
-  lbClose.addEventListener("click", closeLightbox);
-  lb.addEventListener("click", function (e) { if (e.target === lb) closeLightbox(); });
-  document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeLightbox(); });
+  }
+
+  /* ---- Lightbox for design covers (native <dialog>: focus trap + Esc for free) ---- */
+  var lb = document.getElementById("lightbox");
+  if (lb && typeof lb.showModal === "function") {
+    var lbImg = lb.querySelector("img");
+    var lbCap = lb.querySelector("p");
+    document.querySelectorAll(".cover[data-full]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        lbImg.src = btn.getAttribute("data-full");
+        lbImg.alt = btn.getAttribute("data-cap") || "";
+        lbCap.textContent = btn.getAttribute("data-cap") || "";
+        lb.showModal();
+      });
+    });
+    lb.querySelector("[data-close]").addEventListener("click", function () { lb.close(); });
+    lb.addEventListener("click", function (e) { if (e.target === lb) lb.close(); });
+  } else {
+    // No <dialog> support: covers open the image directly.
+    document.querySelectorAll(".cover[data-full]").forEach(function (btn) {
+      btn.addEventListener("click", function () { window.open(btn.getAttribute("data-full"), "_blank"); });
+    });
+  }
 
   /* ---- Year ---- */
-  var y = document.getElementById("year");
-  if (y) y.textContent = new Date().getFullYear();
+  document.querySelectorAll("[data-year]").forEach(function (el) {
+    el.textContent = new Date().getFullYear();
+  });
 })();
