@@ -13,7 +13,15 @@
   --ink-3:   #5F594F;
   --line:    rgba(22, 21, 19, .18);
   --line-2:  rgba(22, 21, 19, .36);
-  --accent:  #A02A1E;          /* vermilion — used sparingly for marks & states */
+  --accent:  #A02A1E;          /* vermilion — marks & states */
+
+  /* Flavours — a Bharatanatyam palette for colour bands & details */
+  --vermilion: #B3301E;        /* kumkum */
+  --turmeric:  #E0A42A;        /* haldi */
+  --peacock:   #1E5A55;        /* temple-silk green */
+  --indigo:    #25325A;
+  --light:     #F4EADB;        /* text on dark bands */
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .09 0 0 0 0 .07 0 0 0 0 .04 0 0 0 .6 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.28'/%3E%3C/svg%3E");
   --ok:      #3F5E45;
   --err:     #9B2F22;
 
@@ -68,7 +76,7 @@ body::before {
   pointer-events: none;
   background:
     radial-gradient(ellipse 120% 90% at 50% 40%, transparent 55%, rgba(110, 84, 40, .14) 100%),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .09 0 0 0 0 .07 0 0 0 0 .04 0 0 0 .6 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.28'/%3E%3C/svg%3E");
+    var(--grain);
 }
 img { display: block; max-width: 100%; height: auto; }
 a { color: inherit; text-decoration: none; }
@@ -555,3 +563,42 @@ em, .it { font-family: var(--serif); font-style: italic; font-size: 1.08em; }
 }
 
 @media (max-width: 420px) { .wordmark small { display: none; } }
+
+/* ============================================================
+   Colour bands — magazine-spread sections in the palette.
+   Each band re-points the tokens, so every component inside adapts.
+   ============================================================ */
+.band { background: var(--band) var(--grain); color: var(--ink); border-top: 0 !important; }
+.band + .section { border-top: 0; }
+.band--vermilion { --band: var(--vermilion); --paper: var(--vermilion); --ink: var(--light); --ink-2: rgba(244,234,219,.88); --ink-3: rgba(244,234,219,.72); --line: rgba(244,234,219,.28); --line-2: rgba(244,234,219,.5); --accent: var(--turmeric); }
+.band--peacock   { --band: var(--peacock);   --paper: var(--peacock);   --ink: var(--light); --ink-2: rgba(244,234,219,.88); --ink-3: rgba(244,234,219,.72); --line: rgba(244,234,219,.26); --line-2: rgba(244,234,219,.5); --accent: var(--turmeric); }
+.band--indigo    { --band: var(--indigo);    --paper: var(--indigo);    --ink: var(--light); --ink-2: rgba(244,234,219,.88); --ink-3: rgba(244,234,219,.72); --line: rgba(244,234,219,.24); --line-2: rgba(244,234,219,.5); --accent: var(--turmeric); }
+.band--turmeric  { --band: var(--turmeric);  --paper: var(--turmeric);  --ink: #1A140B; --ink-2: #33281A; --ink-3: #4A3B25; --line: rgba(26,20,11,.24); --line-2: rgba(26,20,11,.45); --accent: var(--vermilion); }
+.band .btn--solid:hover { background: var(--accent); border-color: var(--accent); color: var(--band); }
+.band--turmeric .btn--solid:hover { color: var(--light); }
+
+/* Section numbers get a dot of colour, cycling through the palette */
+.sec-label .num { display: inline-flex; align-items: center; gap: .5rem; }
+.sec-label .num::before { content: ""; width: .6rem; height: .6rem; border-radius: 50%; background: var(--dot, var(--accent)); }
+.section:nth-of-type(4n+1) { --dot: var(--vermilion); }
+.section:nth-of-type(4n+2) { --dot: var(--turmeric); }
+.section:nth-of-type(4n+3) { --dot: var(--peacock); }
+.section:nth-of-type(4n)   { --dot: var(--indigo); }
+.band .sec-label .num::before { background: var(--accent); }
+
+/* The name, shifted, picks up the palette letter by letter */
+.name.is-shifted .ch:nth-child(4n+1) .g { color: var(--ink); }
+.name.is-shifted .ch:nth-child(4n+2) .g { color: var(--vermilion); }
+.name.is-shifted .ch:nth-child(4n+3) .g { color: var(--peacock); }
+.name.is-shifted .ch:nth-child(4n)   .g { color: var(--turmeric); }
+.name .g { transition: transform 1100ms var(--ease), color var(--d-2) var(--ease); }
+
+/* "Nrithyalaya" letters in rhythm: alternate vermilion & ink on hover */
+.dance-title:hover .l2 .ch:nth-child(3n+2) { color: var(--peacock); }
+.dance-title:hover .l2 .ch:nth-child(3n)   { color: var(--turmeric); }
+
+/* Work kickers in colour */
+.cover:nth-child(4n+1) .k { color: var(--vermilion); }
+.cover:nth-child(4n+2) .k { color: var(--peacock); }
+.cover:nth-child(4n+3) .k { color: var(--indigo); }
+.cover:nth-child(4n)   .k { color: #9A6A0E; }
