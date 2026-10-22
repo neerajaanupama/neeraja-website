@@ -6,8 +6,8 @@
 
 :root {
   /* Colour — aged newsprint, printer's ink, one vermilion accent */
-  --paper:   #E7E1D3;
-  --paper-2: #DAD2C0;
+  --paper:   #EFEADF;
+  --paper-2: #E3DCCD;
   --ink:     #161513;
   --ink-2:   #403C35;
   --ink-3:   #5F594F;
@@ -75,10 +75,10 @@ body::before {
   position: fixed; inset: 0; z-index: -1;
   pointer-events: none;
   background:
-    radial-gradient(38% 44% at 10% 6%,  rgba(224,164,42,.16), transparent 70%),
-    radial-gradient(44% 48% at 90% 94%, rgba(30,90,85,.14),  transparent 72%),
-    radial-gradient(38% 40% at 94% 8%,  rgba(179,48,30,.10),  transparent 70%),
-    radial-gradient(ellipse 120% 90% at 50% 40%, transparent 55%, rgba(110, 84, 40, .14) 100%),
+    radial-gradient(38% 44% at 10% 6%,  rgba(224,164,42,.11), transparent 70%),
+    radial-gradient(44% 48% at 90% 94%, rgba(30,90,85,.10),  transparent 72%),
+    radial-gradient(38% 40% at 94% 8%,  rgba(179,48,30,.07),  transparent 70%),
+    radial-gradient(ellipse 125% 95% at 50% 42%, transparent 62%, rgba(110, 84, 40, .08) 100%),
     var(--grain);
 }
 img { display: block; max-width: 100%; height: auto; }
