@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>A little something — for you</title>
+  <meta name="description" content="A little something, made with love. Open when you have a quiet minute." />
+  <meta name="theme-color" content="#8fd0f2" />
+
+  <!-- Hidden gift: keep this page out of search so the surprise stays a surprise. -->
+  <meta name="robots" content="noindex, nofollow" />
+
+  <!-- Gentle teaser for link previews — does NOT give the surprise away. -->
+  <meta property="og:title" content="A little something — for you" />
+  <meta property="og:description" content="Open when you have a quiet minute. 🌼" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://anupama.cc/assets/img/og-for-you.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="A little something — for you" />
+  <meta name="twitter:description" content="Open when you have a quiet minute. 🌼" />
+  <meta name="twitter:image" content="https://anupama.cc/assets/img/og-for-you.jpg" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/reveal.css" />
+  <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml" />
+  <script>document.documentElement.classList.add("js")</script>
+</head>
+<body>
+
+  <!-- ============ SOFT MUSIC ============
+       Drop a track at assets/audio/for-you.mp3. If it isn't there yet,
+       the page simply stays silent — nothing breaks. -->
+  <audio id="song" src="../assets/audio/for-you.mp3" loop preload="none"></audio>
+
+  <!-- ============ SKY + NATURE (decorative) ============ -->
+  <div class="warm" id="warm" aria-hidden="true"></div>
+  <div class="sky" aria-hidden="true">
+    <span class="sun"><span class="rays"></span></span>
+    <svg class="cloud c1" viewBox="0 0 220 90"><path d="M30 70q-28 0-28-22 0-20 24-20 2-20 26-20 18 0 24 16 8-8 20-8 18 0 22 18 26 0 26 20 0 18-26 18z"/></svg>
+    <svg class="cloud c2" viewBox="0 0 220 90"><path d="M30 70q-28 0-28-22 0-20 24-20 2-20 26-20 18 0 24 16 8-8 20-8 18 0 22 18 26 0 26 20 0 18-26 18z"/></svg>
+    <svg class="cloud c3" viewBox="0 0 220 90"><path d="M30 70q-28 0-28-22 0-20 24-20 2-20 26-20 18 0 24 16 8-8 20-8 18 0 22 18 26 0 26 20 0 18-26 18z"/></svg>
+    <svg class="cloud c4" viewBox="0 0 220 90"><path d="M30 70q-28 0-28-22 0-20 24-20 2-20 26-20 18 0 24 16 8-8 20-8 18 0 22 18 26 0 26 20 0 18-26 18z"/></svg>
+    <div class="meadow">
+      <svg class="meadow-svg" viewBox="0 0 1440 180" preserveAspectRatio="none">
+        <path class="hill hill-b" d="M0 120 C 240 70 480 150 720 110 C 960 70 1200 150 1440 100 L1440 180 L0 180 Z"/>
+        <path class="hill hill-f" d="M0 150 C 300 110 560 175 820 140 C 1080 108 1280 170 1440 140 L1440 180 L0 180 Z"/>
+      </svg>
+    </div>
+  </div>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="motes" id="motes" aria-hidden="true"></div>
+  <div class="flutters" id="flutters" aria-hidden="true"></div>
+  <div class="petals" id="petals" aria-hidden="true"></div>
+  <div class="bursts" id="bursts" aria-hidden="true"></div>
+
+  <!-- ============ SOUND TOGGLE ============ -->
+  <button class="sound" id="sound" type="button" aria-pressed="false" hidden>
+    <span class="sound-ico" aria-hidden="true"></span>
+    <span class="sound-lbl">Sound</span>
+  </button>
+
+  <!-- ============ THE VEIL (tap to open) ============ -->
+  <div class="veil" id="veil">
+    <div class="veil-inner">
+      <p class="veil-kicker">For Anupama</p>
+      <div class="bud" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
+      <button class="open-btn" id="open" type="button">
+        <span class="open-lbl">Tap to open</span>
+      </button>
+      <p class="veil-hint">a little something, with sound · best with the volume up</p>
+    </div>
+  </div>
+
+  <!-- ============ THE REVEAL ============ -->
+  <main class="stage" id="stage">
+
+    <!-- ===== The poem — edit these lines freely ===== -->
+    <section class="scene" aria-label="A note">
+      <p class="eyebrow reveal-line">a letter, for your birthday</p>
+      <p class="verse reveal-line">You are Anupama —</p>
+      <p class="verse reveal-line"><em>incomparable,</em> and I mean it<br />the way the name was made.</p>
+    </section>
+
+    <section class="scene">
+      <p class="verse reveal-line">No one has ever come into my life<br />the way you did:</p>
+      <p class="verse reveal-line">softly, completely,<br /><em>like morning light through leaves.</em></p>
+    </section>
+
+    <section class="scene">
+      <p class="verse reveal-line">Beautiful in the face — yes —</p>
+      <p class="verse reveal-line">but a <em>beautiful soul</em> first,<br />and that is the rarer thing.</p>
+    </section>
+
+    <section class="scene">
+      <p class="verse verse--list reveal-line">Kind. Luminous. Tender. Blooming.</p>
+      <p class="verse reveal-line"><em>Entirely your own.</em></p>
+    </section>
+
+    <!-- ===== Name bloom ===== -->
+    <section class="scene scene--name">
+      <div class="name-wrap reveal-line">
+        <span class="sel" aria-hidden="true">
+          <span class="h tl"></span><span class="h tr"></span><span class="h bl"></span><span class="h br"></span>
+          <span class="sel-tag">incomparable</span>
+        </span>
+        <h1 class="name">Anupama</h1>
+      </div>
+      <div class="blooms" aria-hidden="true">
+        <span class="bloom b1"></span><span class="bloom b2"></span><span class="bloom b3"></span>
+        <span class="bloom b4"></span><span class="bloom b5"></span>
+      </div>
+      <p class="pron reveal-line">/ uh·noo·puh·maa / · a world of your own</p>
+    </section>
+
+    <!-- ===== Birthday + the gift ===== -->
+    <section class="scene scene--gift">
+      <p class="hbd reveal-line">Happy birthday,<br /><em>my love.</em></p>
+      <p class="gift-line reveal-line">I made you a place of your own.</p>
+      <div class="plate reveal-line">
+        <span class="plate-k">your corner of the internet</span>
+        <span class="plate-dom">anupama.cc</span>
+      </div>
+      <a class="enter reveal-line" href="../">
+        Step into your world
+        <svg class="arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 12h16M14 6l6 6-6 6"/></svg>
+      </a>
+      <!-- Sign it: add your name here. -->
+      <p class="sign reveal-line">— with all my love</p>
+    </section>
+  </main>
+
+  <!-- scroll cue (shown after opening) -->
+  <div class="cue" id="cue" hidden aria-hidden="true">
+    <span class="cue-txt">scroll</span>
+    <span class="cue-line"></span>
+  </div>
+
+  <script src="../assets/js/reveal.js"></script>
+</body>
+</html>
